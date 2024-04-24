@@ -17,7 +17,14 @@ class Aseprite {
 
 	#if !macro
 	public static function convertToSLib(fps:Int, aseRes:aseprite.Aseprite) {
-		var slib = new dn.heaps.slib.SpriteLib([ aseRes.toTile() ]);
+        var pages = [ aseRes.toTile() ];
+        if(aseRes.skins != null) {
+            pages = [];
+            for(i in 0...aseRes.skins.length) {
+                pages.push(aseRes.toTile(i));
+            }
+        }
+		var slib = new dn.heaps.slib.SpriteLib(pages);
 
 		// Parse all tags
 		for(tag in aseRes.tags) {
