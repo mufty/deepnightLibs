@@ -28,7 +28,6 @@ class LocalAchivementPlatform extends AbstractAchievementPlatform {
             dones = saved;
         } else {
             dones = [];
-
         }
     }
 
@@ -45,7 +44,8 @@ class LocalAchivementPlatform extends AbstractAchievementPlatform {
 		if(!dones.contains(ach.Id.toString())) {
             dones.push(ach.Id.toString());
             Save.save(this.dones, LOCAL_ACHIEVEMENT_STORAGE);
+            return true;
         }
-		return true;
+		return false;
 	}
 }
