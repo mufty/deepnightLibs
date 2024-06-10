@@ -107,7 +107,7 @@ class AnimManager {
 	}
 
 	@:allow(dn.heaps.slib.SpriteLib)
-	inline function getCurrentAnim() {
+	public inline function getCurrentAnim() {
 		return stack[0];
 	}
 
