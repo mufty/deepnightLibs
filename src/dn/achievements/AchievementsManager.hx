@@ -33,7 +33,8 @@ class AchievementsManager {
 	public function complete(id:String) {
 		if( !isCompleted(id) ) {
 			var status = platform.unlock(getAchievementByName(id));
-			dones.push(id);
+            if(status)
+			    dones.push(id);
 			return status;
 		}
 		else

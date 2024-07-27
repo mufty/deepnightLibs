@@ -28,7 +28,8 @@ class SteamAchivementPlatform extends AbstractAchievementPlatform {
     }
 
 	public function unlock(ach:Achievements):Bool {
-		return steam.Api.setAchievement(ach.steamID);
+        var s = steam.Api.setAchievement(ach.steamID);
+		return s && steam.Api.storeStats();
 	}
 
 	override function getAchById(id:String, achs:ArrayRead<Achievements>):Achievements {
