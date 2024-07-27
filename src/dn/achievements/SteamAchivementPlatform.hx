@@ -34,7 +34,7 @@ class SteamAchivementPlatform extends AbstractAchievementPlatform {
 
 	override function getAchById(id:String, achs:ArrayRead<Achievements>):Achievements {
         for (ach in achs){
-            if(ach.steamID == id) return ach;
+            if(ach.steamID != null && id != null && ach.steamID.toLowerCase() == id.toLowerCase()) return ach;
         }
         return null;
 	}
