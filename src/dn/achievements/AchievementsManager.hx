@@ -7,7 +7,7 @@ import dn.data.AchievementDb;
 class AchievementsManager {
 	public var isLocal(get,never):Bool; inline function get_isLocal() return platform.isLocal;
 	
-	var dones : Array<String>;
+	public var dones : Array<String>;
 	var platform:AbstractAchievementPlatform;
 
 	public function new(platform:AbstractAchievementPlatform,?dbName:String = "achievements.cdb") {
