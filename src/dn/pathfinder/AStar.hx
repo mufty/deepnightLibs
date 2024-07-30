@@ -20,7 +20,12 @@ class AStar<T> {
 		wid = w;
 		hei = h;
 		this.hasCollision = hasCollision;
-		nodes = [];
+
+        updateNodes();
+	}
+
+    public function updateNodes() {
+        nodes = [];
 		for(cy in 0...hei)
 		for(cx in 0...wid) {
 			if( hasCollision(cx-1,cy-1) && !hasCollision(cx,cy-1) && !hasCollision(cx-1,cy)
@@ -34,7 +39,7 @@ class AStar<T> {
 		for(n2 in nodes)
 			if( n!=n2 && sightCheck(n.cx, n.cy, n2.cx, n2.cy) )
 				n.link(n2);
-	}
+    }
 
 	dynamic function hasCollision(cx,cy) return false;
 
