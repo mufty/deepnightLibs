@@ -21,10 +21,10 @@ class AStar<T> {
 		hei = h;
 		this.hasCollision = hasCollision;
 
-        updateNodes();
+        initNodes();
 	}
 
-    public function updateNodes() {
+    function initNodes() {
         nodes = [];
 		for(cy in 0...hei)
 		for(cx in 0...wid) {
@@ -41,10 +41,38 @@ class AStar<T> {
 				n.link(n2);
     }
 
+    public function updateNode(cx, cy){
+        var updateNode = null;
+        for(n in nodes)
+            if(n.cx == cx && n.cy == cy){
+                updateNode = n;
+                break;
+            }
+
+        if(updateNode != null){
+            nodes.remove(updateNode);
+
+            var newNode = null;
+            if( hasCollision(cx-1,cy-1) && !hasCollision(cx,cy-1) && !hasCollision(cx-1,cy)
+				|| hasCollision(cx+1,cy-1) && !hasCollision(cx,cy-1) && !hasCollision(cx+1,cy)
+				|| hasCollision(cx+1,cy+1) && !hasCollision(cx,cy+1) && !hasCollision(cx+1,cy)
+				|| hasCollision(cx-1,cy+1) && !hasCollision(cx,cy+1) && !hasCollision(cx-1,cy) ) {
+                newNode = new PathNode(this, cx,cy);
+                nodes.push( newNode );
+            }
+
+            if(newNode != null){
+                for(n2 in nodes)
+                    if(sightCheck(newNode.cx, newNode.cy, n2.cx, n2.cy))
+                        newNode.link(n2);
+            }
+        }
+    }
+
 	dynamic function hasCollision(cx,cy) return false;
 
 	inline function sightCheck(fx,fy, tx,ty) {
-		return dn.Bresenham.checkThinLine(fx,fy, tx,ty, function(x,y) return !hasCollision(x,y));
+		return dn.Bresenham.checkThickLine(fx,fy, tx,ty, function(x,y) return !hasCollision(x,y));
 	}
 
 	function getNodeAt(cx,cy) {
