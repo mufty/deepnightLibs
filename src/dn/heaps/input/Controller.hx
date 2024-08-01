@@ -189,7 +189,7 @@ class Controller<T:Int> {
 
 
 	var allAccesses : Array<ControllerAccess<T>> = [];
-	var bindings : Map<T, Array< InputBinding<T> >> = new Map();
+	public var bindings : Map<T, Array< InputBinding<T> >> = new Map();
 	var destroyed = false;
 	var enumMapping : Map<PadButton,Int> = new Map();
 	var exclusive : Null<ControllerAccess<T>>;
