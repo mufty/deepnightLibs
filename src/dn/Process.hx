@@ -83,6 +83,9 @@ class Process {
 	var children : FixedArray<Process>;
 	#end
 
+	public var stageWid(get,never) : Int;
+	public var stageHei(get,never) : Int;
+
 	/** Delayer allows for callbacks to be called in a future frame **/
 	public var delayer : dn.Delayer;
 
@@ -393,26 +396,35 @@ class Process {
 
 
 	/** Get graphical context width **/
-	public inline function w(){
+	@:noCompletion @:deprecated("Use stageWid variable instead")
+	public inline function w() return stageWid;
+
+	inline function get_stageWid(){
 		if( CUSTOM_STAGE_WIDTH > 0 )
 			return CUSTOM_STAGE_WIDTH;
+
 		#if heaps
-		return hxd.Window.getInstance().width;
+			return hxd.Window.getInstance().width;
 		#else
-		return 1;
+			return 1;
 		#end
 	}
 
 	/** Get graphical context height **/
-	public inline function h(){
+	@:noCompletion @:deprecated("Use stageHei variable instead")
+	public inline function h() return stageHei;
+
+	inline function get_stageHei(){
 		if( CUSTOM_STAGE_HEIGHT > 0 )
 			return CUSTOM_STAGE_HEIGHT;
+
 		#if heaps
-		return hxd.Window.getInstance().height;
+			return hxd.Window.getInstance().height;
 		#else
-		return 1;
+			return 1;
 		#end
 	}
+
 
 	inline function anyParentPaused() {
 		return parent!=null ? parent.isPaused() : false;
@@ -695,6 +707,14 @@ class Process {
 				cb();
 			END_OF_FRAME_CALLBACKS.empty();
 		}
+	}
+
+	/**
+		Not recommended to use this method, as it will force the garbage collection of all processes.
+		This automatically happens once per frame, at the end of the frame.
+	**/
+	public static function forceProcessGarbageCollection() {
+		_garbageCollector(ROOTS);
 	}
 
 	/** Request a onResize() call for all processes. If `immediately` is false (default), the call will only happen **once** and **at the end** of current frame. **/

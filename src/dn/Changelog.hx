@@ -1,31 +1,25 @@
 package dn;
 
-// Version numbers should follow SemVer semantic x.y.z-label
-// Everything except x is optional
-// See: https://semver.org/
 
-typedef ChangelogEntry = {
-	/**
-		Version with format x.y.z[-label]
-	**/
-	var version : dn.Version;
+/**
+	Markdown Changelog parser
 
-	/**
-		Version title
-	**/
-	var title: Null<String>;
+	Expected format and entry order:
 
-	/**
-		Markdown description lines
-	**/
-	var allNoteLines : Array<String>;
+	```markdown
+	# 0.9 - Some title
+	- ...note...
+	- ...note...
 
-	/**
-		Markdown description lines
-	**/
-	var notEmptyNoteLines : Array<String>;
-}
+	# 0.8
+	- ...note...
+	- ...note...
 
+	# 0.7.2-alpha - Another title
+	- ...note...
+	- ...note...
+	```
+**/
 
 class Changelog {
 	/**
@@ -101,9 +95,11 @@ class Changelog {
 					throw 'Version number "$rawVersion" in changelog do not comply to SemVer semantics';
 
 				var ver = new Version(rawVersion);
+				var title = VERSION_TITLE_REG.matched(2)=="" ? null : VERSION_TITLE_REG.matched(2);
 				cur = {
 					version: ver,
-					title: VERSION_TITLE_REG.matched(2)=="" ? null : VERSION_TITLE_REG.matched(2),
+					title: title,
+					displayTitle: title==null ? ver.toString() : '${ver.toString()} - $title',
 					allNoteLines: [],
 					notEmptyNoteLines: [],
 				}
@@ -178,3 +174,36 @@ class Changelog {
 	}
 	#end
 }
+
+
+
+
+typedef ChangelogEntry = {
+	/**
+		Version using SemVer semantic x[.y.z-label]
+		See: https://semver.org/
+	**/
+	var version : dn.Version;
+
+	/**
+		Raw version title
+	**/
+	var title: Null<String>;
+
+	/**
+		If title is not null: "x.y.z" - "Title string"
+		Otherwise: "x.y.z"
+	**/
+	var displayTitle: Null<String>;
+
+	/**
+		Markdown description lines
+	**/
+	var allNoteLines : Array<String>;
+
+	/**
+		Markdown description lines
+	**/
+	var notEmptyNoteLines : Array<String>;
+}
+
